@@ -4,3 +4,6 @@ version = "1.0.0"
 edition = "2021"
 license = "MIT"
 description = "A program to render text progress bars."
+
+[dependencies]
+progressing = "3.0.2"
