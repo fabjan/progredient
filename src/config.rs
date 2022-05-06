@@ -1,4 +1,4 @@
-use std::{env, fmt::Debug, str::FromStr};
+use std::{env, fmt::Debug, process::exit, str::FromStr};
 
 pub struct Config {
     pub from: i32,
@@ -65,9 +65,29 @@ pub fn configure_from_argv() -> Config {
             "--label" => cfg.label = expect_param("--label", args.next().as_ref()),
             "--left" => cfg.label_placement = LabelPlacement::Left,
             "--style" => cfg.style = expect_param("--style", args.next().as_ref()),
-            _ => (),
+            "--help" | "-h" | "/?" => print_usage_and_exit(0),
+            _ => print_usage_and_exit(1),
         }
     }
 
     cfg
+}
+
+fn print_usage_and_exit(code: i32) {
+    println!(
+        "
+Usage:
+progredient --at X%
+progredient --at Y --from X --to Z
+
+Optional arguments:
+--length L        stretch the bar to be this number of chars long
+--style ABCDE     render the bar as 'ABBBBBBCDDDE' with C positioned at --at
+--label LABEL     show this text after the bar
+--left            show the label before the bar instead
+--help            show this information and exit
+"
+    );
+
+    exit(code)
 }
