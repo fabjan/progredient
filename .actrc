@@ -1,0 +1,1 @@
+-P ubuntu-latest=rust:1.60.0-slim-buster
