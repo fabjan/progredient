@@ -1,9 +1,16 @@
 # progredient
 
+[![Crate][crate-image]][crate-link]
 [![Build Status][build-image]][build-link]
 [![MIT Licensed][license-image]][license-link]
 
 Just a program wrapping the nice and simple [dominicparga/progressing](https://github.com/dominicparga/progressing) for direct use in scripts etc.
+
+## Installing
+
+```
+$ cargo install progredient
+```
 
 ## Usage
 
@@ -50,3 +57,5 @@ $ progredient --at $(pmset -g batt | grep -o '[0-9]*%') --style '()) }'
 [build-link]: https://github.com/fabjan/progredient/actions?query=workflow%3ARust
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg
 [license-link]: https://github.com/interchainio/tendermint-rs/blob/master/LICENSE
+[crate-image]: https://img.shields.io/crates/v/progredient.svg
+[crate-link]: https://crates.io/crates/progredient
