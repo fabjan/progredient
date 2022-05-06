@@ -18,7 +18,7 @@ fn main() {
 
     let mut progress_bar = ClampingBar::new();
 
-    progress_bar.set(at as f64 / (to - from) as f64);
+    progress_bar.set((at - from) as f64 / (to - from) as f64);
 
     progress_bar.set_len(length);
     progress_bar.set_style(style);
