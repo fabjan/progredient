@@ -6,6 +6,7 @@ license = "MIT"
 description = "A program to render text progress bars."
 repository = "https://github.com/fabjan/progredient"
 keywords = ["cli", "scripts", "terminal"]
+categories = ["command-line-utilities", "visualization"]
 
 [dependencies]
 progressing = "3.0.2"
