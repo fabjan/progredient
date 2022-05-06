@@ -1,11 +1,29 @@
 # progredient
 
-Just a program wrapping the nice and simple https://github.com/dominicparga/progressing for direct use in scripts etc.
+[![Build Status][build-image]][build-link]
+[![MIT Licensed][license-image]][license-link]
 
-## Example usage
+Just a program wrapping the nice and simple [dominicparga/progressing](https://github.com/dominicparga/progressing) for direct use in scripts etc.
 
+## Usage
+
+```
+Usage:
+progredient --at X%
+progredient --at Y --from X --to Z
+
+Optional arguments:
+--length L        stretch the bar to be this number of chars long
+--style ABCDE     render the bar as "ABBBBBBCDDDE" with C positioned at --at
+--label LABEL     show this text after the bar
+--left            show the label before the bar instead
+```
+
+## Examples
+
+Glance at your disk usage:
 ```shell
-df | grep disk | while read label blocks used available rest; do progredient --from 0 --to $available --at $used --label $label --style '[|| ]' ; done
+$ df | grep disk | while read label blocks used available rest; do progredient --from 0 --to $available --at $used --label $label --style '[|| ]' ; done
 [||||||            ] /dev/disk1s5s1
 [||                ] /dev/disk1s4
 [|                 ] /dev/disk1s2
@@ -13,3 +31,23 @@ df | grep disk | while read label blocks used available rest; do progredient --f
 [||||||||||||||||||] /dev/disk1s1
 [||||||            ] /dev/disk1s5
 ```
+
+Track your workday:
+```
+$ to_seconds() { gdate -d "1970-01-01 UTC $1" +%s }
+$ progredient --at $(to_seconds $(gdate +%T)) --from $(to_seconds 08:00) --to $(to_seconds 17:00) --style "--O--"
+------------O-------
+```
+
+Check your battery:
+```shell
+$ progredient --at $(pmset -g batt | grep -o '[0-9]*%') --style '()) }'
+()))))))))))))))   }
+```
+
+[//]: # (badges)
+
+[build-image]: https://github.com/fabjan/progredient/workflows/Rust/badge.svg
+[build-link]: https://github.com/fabjan/progredient/actions?query=workflow%3ARust
+[license-image]: https://img.shields.io/badge/license-MIT-blue.svg
+[license-link]: https://github.com/interchainio/tendermint-rs/blob/master/LICENSE
