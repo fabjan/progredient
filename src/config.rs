@@ -54,7 +54,7 @@ pub fn configure_from_argv() -> Config {
             "--to" => cfg.to = expect_param("--to", args.next().as_ref()),
             "--at" => {
                 let param = args.next().expect("--at needs a parameter");
-                if param.ends_with("%") {
+                if param.ends_with('%') {
                     cfg.from = 0;
                     cfg.to = 100;
                     cfg.at = i32::from_str(&param[..param.len() - 1]).expect("--at needs a number");
