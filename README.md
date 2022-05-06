@@ -23,13 +23,12 @@ Optional arguments:
 
 Glance at your disk usage:
 ```shell
-$ df | grep disk | while read label blocks used available rest; do progredient --from 0 --to $available --at $used --label $label --style '[|| ]' ; done
-[||||||            ] /dev/disk1s5s1
-[||                ] /dev/disk1s4
+$ df | grep disk | while read label blocks used available capacity rest; do progredient --at $capacity --label $label --style '[|| ]' ; done
+[||||              ] /dev/disk1s5s1
+[|                 ] /dev/disk1s4
 [|                 ] /dev/disk1s2
 [|                 ] /dev/disk1s6
-[||||||||||||||||||] /dev/disk1s1
-[||||||            ] /dev/disk1s5
+[||||||||||||||    ] /dev/disk1s1
 ```
 
 Track your workday:
