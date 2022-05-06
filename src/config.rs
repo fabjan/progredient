@@ -52,7 +52,16 @@ pub fn configure_from_argv() -> Config {
             "--length" => cfg.length = expect_param("--length", args.next().as_ref()),
             "--from" => cfg.from = expect_param("--from", args.next().as_ref()),
             "--to" => cfg.to = expect_param("--to", args.next().as_ref()),
-            "--at" => cfg.at = expect_param("--at", args.next().as_ref()),
+            "--at" => {
+                let param = args.next().expect("--at needs a parameter");
+                if param.ends_with("%") {
+                    cfg.from = 0;
+                    cfg.to = 100;
+                    cfg.at = i32::from_str(&param[..param.len() - 1]).expect("--at needs a number");
+                } else {
+                    cfg.at = i32::from_str(&param).expect("--at needs a number");
+                }
+            }
             "--label" => cfg.label = expect_param("--label", args.next().as_ref()),
             "--left" => cfg.label_placement = LabelPlacement::Left,
             "--style" => cfg.style = expect_param("--style", args.next().as_ref()),
