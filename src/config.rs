@@ -7,6 +7,7 @@ pub struct Config {
     pub label: String,
     pub label_placement: LabelPlacement,
     pub style: String,
+    pub no_newline: bool,
 }
 pub enum LabelPlacement {
     Left,
@@ -23,6 +24,7 @@ impl Default for Config {
             label: String::from(""),
             label_placement: LabelPlacement::Right,
             style: String::from("[=>.]"),
+            no_newline: false,
         }
     }
 }
@@ -76,6 +78,7 @@ pub fn from_argv() -> ParseResult {
             "--left" => cfg.label_placement = LabelPlacement::Left,
             "--style" => cfg.style = expect_param("--style", args.next().as_ref()),
             "--help" | "-h" | "/?" => return ParseResult::ShowHelp,
+            "--no-newline" => cfg.no_newline = true,
             arg => return ParseResult::ErrorUnknownArgument(arg.to_owned()),
         }
     }
@@ -95,6 +98,7 @@ Optional arguments:
 --label LABEL     show this text after the bar
 --left            show the label before the bar instead
 --help            show this information and exit
+--no-newline      do not print a newline after the bar
 "
     .to_owned()
 }

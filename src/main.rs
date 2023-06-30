@@ -17,5 +17,9 @@ fn main() {
 
     let output = progredient::render(&cfg);
 
-    println!("{output}");
+    if cfg.no_newline {
+        print!("{output}");
+    } else {
+        println!("{output}");
+    }
 }
