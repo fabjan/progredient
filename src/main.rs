@@ -1,33 +1,21 @@
-use config::configure_from_argv;
-use progressing::{clamping::Bar as ClampingBar, Baring};
+use std::process;
 
-use crate::config::LabelPlacement;
-
-mod config;
+use progredient::{self, config};
 
 fn main() {
-    let config::Config {
-        from,
-        to,
-        at,
-        length,
-        label,
-        label_placement,
-        style,
-    } = configure_from_argv();
-
-    let mut progress_bar = ClampingBar::new();
-
-    progress_bar.set((at - from) as f64 / (to - from) as f64);
-
-    progress_bar.set_len(length);
-    progress_bar.set_style(style);
-
-    let output = match label_placement {
-        _ if label.is_empty() => format!("{}", progress_bar),
-        LabelPlacement::Left => format!("{} {}", label, progress_bar),
-        LabelPlacement::Right => format!("{} {}", progress_bar, label),
+    let cfg = match config::from_argv() {
+        progredient::config::ParseResult::ShowHelp => {
+            println!("{}", config::usage());
+            process::exit(0);
+        }
+        progredient::config::ParseResult::ErrorUnknownArgument(arg) => {
+            println!("Unknown argument: {arg}");
+            process::exit(64);
+        }
+        progredient::config::ParseResult::Ok(cfg) => cfg,
     };
 
-    println!("{}", output);
+    let output = progredient::render(&cfg);
+
+    println!("{output}");
 }
