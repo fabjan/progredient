@@ -9,7 +9,8 @@ fn main() {
             process::exit(0);
         }
         progredient::config::ParseResult::ErrorUnknownArgument(arg) => {
-            println!("Unknown argument: {arg}");
+            println!("ERROR: Unknown argument: {arg}");
+            println!("{}", config::usage());
             process::exit(64);
         }
         progredient::config::ParseResult::Ok(cfg) => cfg,
