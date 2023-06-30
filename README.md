@@ -24,6 +24,7 @@ Optional arguments:
 --style ABCDE     render the bar as "ABBBBBBCDDDE" with C positioned at --at
 --label LABEL     show this text after the bar
 --left            show the label before the bar instead
+--no-newline      do not print a newline after the bar
 ```
 
 ## Examples
