@@ -1,5 +1,4 @@
-use std::{env, fmt::Debug, process::exit, str::FromStr};
-
+use std::{env, fmt::Debug, str::FromStr};
 pub struct Config {
     pub from: i32,
     pub to: i32,
@@ -8,11 +7,26 @@ pub struct Config {
     pub label: String,
     pub label_placement: LabelPlacement,
     pub style: String,
+    pub no_newline: bool,
 }
-
 pub enum LabelPlacement {
     Left,
     Right,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            from: 0,
+            to: 100,
+            at: 0,
+            length: 20,
+            label: String::from(""),
+            label_placement: LabelPlacement::Right,
+            style: String::from("[=>.]"),
+            no_newline: false,
+        }
+    }
 }
 
 fn expect_param<T>(desc: &str, param: Option<&String>) -> T
@@ -20,7 +34,7 @@ where
     T: FromStr,
     <T as FromStr>::Err: Debug,
 {
-    let param = param.unwrap_or_else(|| panic!("{} needs a parameter", desc));
+    let param = param.unwrap_or_else(|| panic!("{desc} needs a parameter"));
     let param = T::from_str(param);
 
     param.unwrap_or_else(|_| {
@@ -32,16 +46,14 @@ where
     })
 }
 
-pub fn configure_from_argv() -> Config {
-    let mut cfg = Config {
-        length: 20,
-        from: 0,
-        to: 20,
-        at: 0,
-        label: String::from(""),
-        label_placement: LabelPlacement::Right,
-        style: String::from("[=>.]"),
-    };
+pub enum ParseResult {
+    Ok(Config),
+    ShowHelp,
+    ErrorUnknownArgument(String),
+}
+
+pub fn from_argv() -> ParseResult {
+    let mut cfg = Config::default();
 
     let mut args = env::args();
 
@@ -65,17 +77,17 @@ pub fn configure_from_argv() -> Config {
             "--label" => cfg.label = expect_param("--label", args.next().as_ref()),
             "--left" => cfg.label_placement = LabelPlacement::Left,
             "--style" => cfg.style = expect_param("--style", args.next().as_ref()),
-            "--help" | "-h" | "/?" => print_usage_and_exit(0),
-            _ => print_usage_and_exit(1),
+            "--help" | "-h" | "/?" => return ParseResult::ShowHelp,
+            "--no-newline" => cfg.no_newline = true,
+            arg => return ParseResult::ErrorUnknownArgument(arg.to_owned()),
         }
     }
 
-    cfg
+    ParseResult::Ok(cfg)
 }
 
-fn print_usage_and_exit(code: i32) {
-    println!(
-        "
+pub fn usage() -> String {
+    "
 Usage:
 progredient --at X%
 progredient --at Y --from X --to Z
@@ -86,8 +98,7 @@ Optional arguments:
 --label LABEL     show this text after the bar
 --left            show the label before the bar instead
 --help            show this information and exit
+--no-newline      do not print a newline after the bar
 "
-    );
-
-    exit(code)
+    .to_owned()
 }
